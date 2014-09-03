@@ -10,7 +10,7 @@ def searchable_string(user_input):
 
 def search_page(anime_name):
     website_request = Request("http://bestanimes.tv/?s=" + searchable_string(anime_name), None, USER_AGENT)
-    website_html = urlopen(q).read()
+    website_html = urlopen(website_request).read()
     return website_html
 
 def get_episodes(html_text):
@@ -20,7 +20,7 @@ def get_episodes(html_text):
         print(i.getText().strip())
 
 def get_episode_url(html_text):
-    soup2 = BeautifulSoup(html_text)
+    soup = BeautifulSoup(html_text)
     episode_url_list = soup.findAll('div', {'class': 'episode-list'})
     for i in episode_url_list:
         episode_url = i.findAll('a')

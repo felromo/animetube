@@ -2,7 +2,6 @@
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
-import re
 
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
 

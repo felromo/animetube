@@ -5,5 +5,7 @@ media player.
 PRE-ALPHA STAGE !!! 
 
 TODO:
-    Add sites to parse
+    Add more sites to parse
+    Add parsers for hosts other than trollvideo
+    Add argument parser capabilities
     

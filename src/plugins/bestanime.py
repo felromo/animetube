@@ -18,10 +18,13 @@ def search_page(anime_name):
 
 
 def get_episodes(html_text):
+    li = []
     soup = BeautifulSoup(html_text)
     episode_list = soup.findAll('div', {'class': 'episode-list'})
     for i in episode_list:
-        print(i.getText().strip())
+        # print(i.getText().strip())
+        li.append(i.getText().strip())
+    return li
 
 
 def get_episode_url(html_text):

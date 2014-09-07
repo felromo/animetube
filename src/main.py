@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 from plugins import bestanime, trollvideo
-import subprocess
+from subprocess import call, Popen, PIPE, STDOUT
+
+try:
+    from subprocess import DEVNULL
+except ImportError:
+    import os
+    DEVNULL = open(os.devnull, 'wb')
 
 
 def main():
@@ -31,7 +37,9 @@ def main():
     content = trollvideo.trollvideo(host)
     print (content)
 
-    subprocess.call(['vlc', content])
+    call(['vlc', content], stdout=DEVNULL, stderr=STDOUT)
+
+    print ("Video has finished watch another?")
 
 
 if __name__ == "__main__":

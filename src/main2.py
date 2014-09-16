@@ -23,22 +23,22 @@ def player(videoContent):
 
 if __name__ == '__main__':
     parser = parser.parser()
-    mainLoop = 'd'
+    main_loop = 'd'
     content = ""
-    while mainLoop != 'q':
+    while main_loop != 'q':
         valid = True
-        if mainLoop == 'd':
+        if main_loop == 'd':
             animeName = input("Anime Name: ")
             parser.setAnime(animeName)
             for episode in parser.getEpisodes():
                 print (episode)
             episodeChoice = input("Choose an episode id (number in brackets []): ")
             content = parser.playEpisode(int(episodeChoice))
-        elif mainLoop == 'n':
+        elif main_loop == 'n':
             content = parser.playEpisode(parser.nextEpisode)
-        elif mainLoop == 'p':
+        elif main_loop == 'p':
             content = parser.playEpisode(parser.prevEpisode)
-        elif mainLoop == 'r':
+        elif main_loop == 'r':
             pass  # don't need to do anything to replay
         else:
             print ("Not a valid option")
@@ -46,4 +46,4 @@ if __name__ == '__main__':
         if valid:
             player(content)
         menu()
-        mainLoop = input(">>")
+        main_loop = input(">>")

@@ -7,16 +7,16 @@ from bs4 import BeautifulSoup
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
 
 
-def mp4upload(hostUrl):
+def mp4upload(host_url):
     """
     takes in a link with the embeded video player and returns a clean url of
     the actual content to be passed onto the player
     """
     content = ""
     pattern = r'\'file\':\s*\'(.+)\''
-    videoRequest = Request(hostUrl, None, USER_AGENT)
-    videoHtml = urlopen(videoRequest).read()
-    soup = BeautifulSoup(videoHtml)
+    video_request = Request(host_url, None, USER_AGENT)
+    video_html = urlopen(video_request).read()
+    soup = BeautifulSoup(video_html)
     scripts = soup.findAll('script', {'type': 'text/javascript'})
     script = scripts[3]
     for line in script:

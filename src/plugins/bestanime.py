@@ -70,3 +70,25 @@ def getHostingSite(mirror):
         for f in tmp:
             host = f['src']
     return host
+
+def getNextPrev(currentEpisodeUrl):
+    """
+    pass it the url of the currently viewed episode, and it will return a
+    touple containing (previous episode, next episode)
+    """
+    prevEP = ""
+    nextEP = ""
+    pageRequest = Request(currentEpisodeUrl, None, USER_AGENT)
+    pageHtml = urlopen(pageRequest).read()
+    soup = BeautifulSoup(pageHtml)
+    results = soup.findAll('div', {'class': 'floatLeft'})
+    for i in results:
+        tmp = i.findAll('a')
+        for f in tmp:
+            prevEP = f['href']
+    results = soup.findAll('div', {'class': 'floatRight'})
+    for i in results:
+        tmp = i.findAll('a')
+        for f in tmp:
+            nextEP = f['href']
+    return (prevEP,nextEP)

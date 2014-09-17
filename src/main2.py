@@ -44,6 +44,7 @@ if __name__ == '__main__':
             print ("Not a valid option")
             valid = False
         if valid:
+            print ("Playing: " + parser.getEpisodes()[int(episodeChoice)][5:-1])
             player(content)
         menu()
         mainLoop = input(">>")

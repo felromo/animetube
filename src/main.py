@@ -10,10 +10,10 @@ except ImportError:
 
 
 def main():
-    anime_name = input("Type an anime name: ")
-    anime_name = bestanime.searchable_string(anime_name)
-    episodes = bestanime.get_episodes(bestanime.search_page(anime_name))
-    episode_urls = bestanime.get_episode_url(bestanime.search_page(anime_name))
+    animeName = input("Type an anime name: ")
+    animeName = bestanime.searchable_string(animeName)
+    episodes = bestanime.get_episodes(bestanime.search_page(animeName))
+    episodeUrls = bestanime.get_episode_url(bestanime.search_page(animeName))
     selector = 0
     for episode in episodes:
         print ("([{}] {})".format(selector, episode))
@@ -27,7 +27,7 @@ def main():
     episodeChoice = input("Choose an episode to view: ")
     print ("Viewing ", episodes[int(episodeChoice)])
 
-    mirrors = bestanime.getMirrors(episode_urls[int(episodeChoice)])
+    mirrors = bestanime.getMirrors(episodeUrls[int(episodeChoice)])
     print ("Available Mirrors")
     print (mirrors)
 

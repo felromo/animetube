@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-
-from .plugins import parser
+from plugins import parser
 from subprocess import call, Popen, PIPE, STDOUT
 
 try:
@@ -23,23 +22,23 @@ def player(videoContent):
          stderr=STDOUT)
 
 if __name__ == '__main__':
-    parser_obj = parser.Parser()
-    main_loop = 'd'
+    parser = parser.parser()
+    mainLoop = 'd'
     content = ""
-    while main_loop != 'q':
+    while mainLoop != 'q':
         valid = True
-        if main_loop == 'd':
+        if mainLoop == 'd':
             animeName = input("Anime Name: ")
-            parser_obj.set_anime(animeName)
-            for episode in parser_obj.get_episodes():
+            parser.setAnime(animeName)
+            for episode in parser.getEpisodes():
                 print (episode)
-            episode_choice = input("Choose an episode id (number in brackets []): ")
-            content = parser_obj.play_episode(int(episode_choice))
-        elif main_loop == 'n':
-            content = parser_obj.play_episode(parser_obj.next_episode)
-        elif main_loop == 'p':
-            content = parser_obj.play_episode(parser_obj.next_episode)
-        elif main_loop == 'r':
+            episodeChoice = input("Choose an episode id (number in brackets []): ")
+            content = parser.playEpisode(int(episodeChoice))
+        elif mainLoop == 'n':
+            content = parser.playEpisode(parser.nextEpisode)
+        elif mainLoop == 'p':
+            content = parser.playEpisode(parser.prevEpisode)
+        elif mainLoop == 'r':
             pass  # don't need to do anything to replay
         else:
             print ("Not a valid option")
@@ -47,4 +46,4 @@ if __name__ == '__main__':
         if valid:
             player(content)
         menu()
-        main_loop = input(">>")
+        mainLoop = input(">>")

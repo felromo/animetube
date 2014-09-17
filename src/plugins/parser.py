@@ -1,48 +1,53 @@
 #!/usr/bin/python3
-from . import bestanime, trollvideo
+from plugins import bestanime, trollvideo
 
-class Parser():
 
-    def __init__(self, anime_name="", action='d', siteParser='bestanime',
+class parser():
+
+
+    def __init__(self, animeName="", action='d', siteParser='bestanime',
                  hostParser='trollvideo'):
-        self.anime_name = anime_name
-        self.episodes = []
-        self.episode_urls = None
-        self.prev_episode = None
-        self.next_episode = None
+        self.animeName = animeName
+        self.episodes = None
+        self.episodeUrls = None
+        self.prevEpisode = None
+        self.nextEpisode = None
         self.mirrors = None
         self.host = None
 
 
-    def __set_episodes(self):
-        self.episodes = bestanime.get_episodes(bestanime.search_page(self.anime_name))
+    def __setEpisodes(self):
+        self.episodes = bestanime.get_episodes(
+            bestanime.search_page(self.animeName))
 
-    def __set_episode_urls(self):
-        self.episode_urls = bestanime.get_episode_url(bestanime.search_page(self.anime_name))
+    def __setEpisodeUrls(self):
+        self.episodeUrls = bestanime.get_episode_url(
+            bestanime.search_page(self.animeName))
 
-    def __set_mirrors(self, episode_choice):
-        if type(episode_choice) is int:
-            self.mirrors = bestanime.get_mirrors(self.episode_urls[episode_choice])
+    def __setMirrors(self, episodeChoice):
+        if type(episodeChoice) is int:
+            self.mirrors = bestanime.getMirrors(self.episodeUrls[episodeChoice])
         else:
-            self.mirrors = bestanime.get_mirrors(episode_choice)
+            self.mirrors = bestanime.getMirrors(episodeChoice)
 
-    def __set_host(self):
+    def __setHost(self):
         # this should change according to a future config file
-        self.host = bestanime.get_hosting_site(self.mirrors[0])
+        self.host = bestanime.getHostingSite(self.mirrors[0])
 
-    def __set_next_prev(self, episode_choice):
-        #TODO
-        if type(episode_choice) is int:
-            self.prev_episode, self.next_episode = bestanime.getNextPrev(self.episode_urls[episode_choice])
+    def __setNextPrev(self, episodeChoice):
+        if type(episodeChoice) is int:
+            self.prevEpisode, self.nextEpisode = bestanime.getNextPrev(
+                self.episodeUrls[episodeChoice])
         else:
-            self.prev_episode, self.next_episode = bestanime.getNextPrev(episode_choice)
+            self.prevEpisode, self.nextEpisode = bestanime.getNextPrev(
+                episodeChoice)
 
-    def set_anime(self, anime_name):
-        self.anime_name = bestanime.searchable_string(anime_name)
-        self.__set_episodes()
-        self.__set_episode_urls()
+    def setAnime(self, animeName):
+        self.animeName = bestanime.searchable_string(animeName)
+        self.__setEpisodes()
+        self.__setEpisodeUrls()
 
-    def get_episodes(self):
+    def getEpisodes(self):
         li = []
         selector = 0
         for episode in self.episodes:
@@ -50,10 +55,10 @@ class Parser():
             selector = selector + 1
         return li
 
-    def play_episode(self, episode_choice, selection=''):
-        self.__set_next_prev(episode_choice)
-        self.__set_mirrors(episode_choice)
-        self.__set_host()
+    def playEpisode(self, episodeChoice, selection=''):
+        self.__setNextPrev(episodeChoice)
+        self.__setMirrors(episodeChoice)
+        self.__setHost()
         return trollvideo.trollvideo(self.host)
 
 

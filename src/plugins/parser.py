@@ -4,17 +4,16 @@ from plugins import bestanime, trollvideo
 
 class parser():
 
-
     def __init__(self, animeName="", action='d', siteParser='bestanime',
                  hostParser='trollvideo'):
         self.animeName = animeName
         self.episodes = None
         self.episodeUrls = None
+        self.currentEpisode = None
         self.prevEpisode = None
         self.nextEpisode = None
         self.mirrors = None
         self.host = None
-
 
     def __setEpisodes(self):
         self.episodes = bestanime.get_episodes(
@@ -48,6 +47,10 @@ class parser():
         self.__setEpisodeUrls()
 
     def getEpisodes(self):
+        """
+        maybe make this return a touple with selector, episode
+        or a dictionary ? key:selector value:touple(episode,url)
+        """
         li = []
         selector = 0
         for episode in self.episodes:
@@ -60,9 +63,3 @@ class parser():
         self.__setMirrors(episodeChoice)
         self.__setHost()
         return trollvideo.trollvideo(self.host)
-
-
-
-
-
-

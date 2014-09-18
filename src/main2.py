@@ -36,8 +36,12 @@ if __name__ == '__main__':
             content = parser.playEpisode(int(episodeChoice))
         elif mainLoop == 'n':
             content = parser.playEpisode(parser.nextEpisode)
+            episodeChoice = int(episodeChoice) - 1
+            print (episodeChoice)
         elif mainLoop == 'p':
             content = parser.playEpisode(parser.prevEpisode)
+            episodeChoice = int(episodeChoice) + 1
+            print (episodeChoice)
         elif mainLoop == 'r':
             pass  # don't need to do anything to replay
         else:

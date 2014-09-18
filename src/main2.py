@@ -2,7 +2,7 @@
 from plugins import parser
 from subprocess import call, Popen, PIPE, STDOUT
 from colorama import Fore
-import platform
+import platform, os
 
 # Just makes it easier to give colors later on in the program
 RED = Fore.RED
@@ -32,9 +32,11 @@ def menu():
 
 def player(videoContent):
     if platform.system() != "Linux":
-        pass
-    call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
-         stderr=STDOUT)
+        os.putenv('PATH', ';C:\Program Files (x86)\VideoLAN\VLC\;')
+        os.system('START vlc')
+    else:
+        call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
+            stderr=STDOUT)
 
 if __name__ == '__main__':
     parser = parser.parser()

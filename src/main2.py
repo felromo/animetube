@@ -47,8 +47,8 @@ if __name__ == '__main__':
         if mainLoop == 'd':
             animeName = input("Anime Name: ")
             parser.setAnime(animeName)
-            for episode in parser.getEpisodes():
-                print (episode)
+            for selector, episode in parser.getEpisodes():
+                print (GREEN + "[" + str(selector) + "]" + RESET + episode)
             episodeChoice = input("Choose an episode id " + GREEN +
                                   "(number in brackets [])" + RESET + ": ")
             content = parser.playEpisode(int(episodeChoice))

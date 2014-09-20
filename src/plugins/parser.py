@@ -54,7 +54,8 @@ class parser():
         li = []
         selector = 0
         for episode in self.episodes:
-            li.append("([{}] {})".format(selector, episode))
+            # li.append("([{}] {})".format(selector, episode))
+            li.append((selector, episode))
             selector = selector + 1
         return li
 

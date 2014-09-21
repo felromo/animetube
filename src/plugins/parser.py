@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from plugins import bestanime, trollvideo
+from plugins import bestanime, hostParser
 
 
 class parser():
@@ -29,9 +29,9 @@ class parser():
         else:
             self.mirrors = bestanime.getMirrors(episodeChoice)
 
-    def __setHost(self):
+    def __setHost(self,mirrorChoice):
         # this should change according to a future config file
-        self.host = bestanime.getHostingSite(self.mirrors[0])
+        self.host = bestanime.getHostingSite(self.mirrors[mirrorChoice])
 
     def __setNextPrev(self, episodeChoice):
         if type(episodeChoice) is int:
@@ -59,8 +59,16 @@ class parser():
             selector = selector + 1
         return li
 
-    def playEpisode(self, episodeChoice, selection=''):
+    def getMirrors(self):
+        li = []
+        selector = 0
+        for mirror in  self.mirrors:
+            li.append((selector, mirror))
+            selector = selector + 1
+        return li
+
+    def playEpisode(self, episodeChoice, selection='', mirrorChoice=0):
         self.__setNextPrev(episodeChoice)
         self.__setMirrors(episodeChoice)
-        self.__setHost()
-        return trollvideo.trollvideo(self.host)
+        self.__setHost(mirrorChoice)
+        return hostParser.hostParser(self.host)

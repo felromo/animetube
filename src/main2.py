@@ -23,10 +23,11 @@ except ImportError:
 
 
 def menu():
-    print (GREEN + "[N]" + RESET + "ext Episode" )
+    print (GREEN + "[N]" + RESET + "ext Episode")
     print (GREEN + "[P]" + RESET + "revious Episode")
     print (GREEN + "[D]" + RESET + "ifferent Anime")
     print (GREEN + "[R]" + RESET + "eplay same Episode")
+    print (GREEN + "[C]" + RESET + "hange Mirror")
     print (GREEN + "[Q]" + RESET + "uit out of program")
 
 
@@ -52,6 +53,11 @@ if __name__ == '__main__':
             episodeChoice = input("Choose an episode id " + GREEN +
                                   "(number in brackets [])" + RESET + ": ")
             content = parser.playEpisode(int(episodeChoice))
+        elif mainLoop == 'c':
+            for selector, mirror in parser.getMirrors():
+                print (GREEN + "[" + str(selector) + "]" + RESET + mirror)
+            content = parser.playEpisode(int(episodeChoice),
+                                         mirrorChoice=int(input("Mirror: ")))
         elif mainLoop == 'n':
             content = parser.playEpisode(parser.nextEpisode)
             episodeChoice = int(episodeChoice) - 1

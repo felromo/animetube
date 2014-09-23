@@ -39,6 +39,17 @@ def get_episode_url(html_text):
 
 
 def getMirrors(episodeURI):
+    li = []
+    episodeRequest = Request(episodeURI, None, USER_AGENT)
+    episodeHtml = urlopen(episodeRequest).read()
+    soup = BeautifulSoup(episodeHtml)
+    mirrorList = soup.findAll('div', {'class', 'sources'})
+    for mirror in mirrorList:
+        li.append(mirror.get_text())
+    return li
+
+
+def getMirrorUrls(episodeURI):
     """
     Pass it a url and it will return a list with the urls to the
     mirrors of that particular url passed. Will do this for the first element
@@ -71,6 +82,7 @@ def getHostingSite(mirror):
             host = f['src']
     return host
 
+
 def getNextPrev(currentEpisodeUrl):
     """
     pass it the url of the currently viewed episode, and it will return a
@@ -91,4 +103,4 @@ def getNextPrev(currentEpisodeUrl):
         tmp = i.findAll('a')
         for f in tmp:
             nextEP = f['href']
-    return (prevEP,nextEP)
+    return (prevEP, nextEP)

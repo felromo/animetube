@@ -13,6 +13,7 @@ class parser():
         self.prevEpisode = None
         self.nextEpisode = None
         self.mirrors = None
+        self.mirrorUrls = None
         self.host = None
 
     def __setEpisodes(self):
@@ -29,9 +30,15 @@ class parser():
         else:
             self.mirrors = bestanime.getMirrors(episodeChoice)
 
-    def __setHost(self,mirrorChoice):
+    def __setMirrorUrls(self, episodeChoice):
+        if type(episodeChoice) is int:
+            self.mirrorUrls = bestanime.getMirrorUrls(self.episodeUrls[episodeChoice])
+        else:
+            self.mirrorUrls = bestanime.getMirrorUrls(episodeChoice)
+
+    def __setHost(self, mirrorChoice):
         # this should change according to a future config file
-        self.host = bestanime.getHostingSite(self.mirrors[mirrorChoice])
+        self.host = bestanime.getHostingSite(self.mirrorUrls[mirrorChoice])
 
     def __setNextPrev(self, episodeChoice):
         if type(episodeChoice) is int:
@@ -62,7 +69,7 @@ class parser():
     def getMirrors(self):
         li = []
         selector = 0
-        for mirror in  self.mirrors:
+        for mirror in self.mirrors:
             li.append((selector, mirror))
             selector = selector + 1
         return li
@@ -70,5 +77,6 @@ class parser():
     def playEpisode(self, episodeChoice, selection='', mirrorChoice=0):
         self.__setNextPrev(episodeChoice)
         self.__setMirrors(episodeChoice)
+        self.__setMirrorUrls(episodeChoice)
         self.__setHost(mirrorChoice)
         return hostParser.hostParser(self.host)

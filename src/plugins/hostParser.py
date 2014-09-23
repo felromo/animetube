@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 import re
 
+
 def hostParser(url):
-    patternList = ["auengine", "trollvid"]
+    patternList = ["auengine", "trollvid", "mp4upload"]
     finalMatch = ""
     content = ""
     for pattern in patternList:
@@ -15,5 +16,8 @@ def hostParser(url):
     if finalMatch == "trollvid":
         from plugins import trollvideo
         content = trollvideo.trollvideo(url)
+    if finalMatch == "mp4upload":
+        from plugins import mp4upload
+        content = mp4upload.mp4upload(url)
 
     return content

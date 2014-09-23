@@ -13,13 +13,13 @@ def mp4upload(hostUrl):
     the actual content to be passed onto the player
     """
     content = ""
-    pattern = r'\'file\':\s*\'(.+)\''
+    pattern = r'mp4:\s*"(.+)"'
     videoRequest = Request(hostUrl, None, USER_AGENT)
     videoHtml = urlopen(videoRequest).read()
     soup = BeautifulSoup(videoHtml)
     scripts = soup.findAll('script', {'type': 'text/javascript'})
-    script = scripts[3]
+    script = scripts[-2]
     for line in script:
-        match = re.findall(pattern, line)
-        content = match
-    return unquote(content[0])
+        match = re.search(pattern, line)
+        content = match.group(1)
+    return unquote(content)

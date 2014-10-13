@@ -34,7 +34,8 @@ def menu():
 def player(videoContent):
     if platform.system() != "Linux":
         os.putenv('PATH', ';C:\Program Files (x86)\VideoLAN\VLC\;')
-        os.system('START vlc')
+        call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
+            stderr=STDOUT)
     else:
         call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
             stderr=STDOUT)

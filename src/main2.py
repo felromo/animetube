@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 from plugins import parser
 from subprocess import call, Popen, PIPE, STDOUT
-from colorama import Fore
+from colorama import Fore, init
 import platform, os
+
+init() # for windows colorama (will make this os dependent later)
 
 # Just makes it easier to give colors later on in the program
 RED = Fore.RED

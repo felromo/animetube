@@ -1,6 +1,21 @@
 #!/usr/bin/python3
-from plugins import bestanime, trollvideo
+from plugins import parser
 from subprocess import call, Popen, PIPE, STDOUT
+from colorama import Fore, init
+import platform, os
+
+init() # for windows colorama (will make this os dependent later)
+
+# Just makes it easier to give colors later on in the program
+RED = Fore.RED
+BLACK = Fore.BLACK
+GREEN = Fore.GREEN
+YELLOW = Fore.YELLOW
+BLUE = Fore.BLUE
+MAGENTA = Fore.MAGENTA
+CYAN = Fore.CYAN
+WHITE = Fore.WHITE
+RESET = Fore.RESET
 
 try:
     from subprocess import DEVNULL
@@ -9,65 +24,58 @@ except ImportError:
     DEVNULL = open(os.devnull, 'wb')
 
 
-def animeName():
-    animeName = input("Type an anime name: ")
-    return bestanime.searchable_string(animeName)
-
-
-def parser(animeName, action='d'):
-    print (action)
-    parser.episodes = bestanime.get_episodes(bestanime.search_page(animeName))
-    episodeUrls = bestanime.get_episode_url(bestanime.search_page(animeName))
-    selector = 0
-    for episode in parser.episodes:
-        print ("([{}] {})".format(selector, episode))
-        selector = selector + 1
-
-    if action != "n" and action != "p":
-        parser.episodeChoice = input("Choose an episode to view: ")
-    elif action == "n":
-        parser.episodeChoice = int(parser.episodeChoice) - 1
-    elif action == "p":
-        parser.episodeChoice = int(parser.episodeChoice) + 1
-    print ("Viewing ", parser.episodes[int(parser.episodeChoice)])
-
-    mirrors = bestanime.getMirrors(episodeUrls[int(parser.episodeChoice)])
-    prevEpisode, nextEpisode = bestanime.getNextPrev(
-        episodeUrls[int(parser.episodeChoice)])
-    print ("Available Mirrors")
-    print (mirrors)
-
-    host = bestanime.getHostingSite(mirrors[0])
-    if action == 'n':
-        host = bestanime.getHostingSite(nextEpisode)
-    if action == 'p':
-        host = bestanime.getHostingSite(prevEpisode)
-    print (host)
-
-    content = trollvideo.trollvideo(host)
-    return content
+def menu():
+    print (GREEN + "[N]" + RESET + "ext Episode")
+    print (GREEN + "[P]" + RESET + "revious Episode")
+    print (GREEN + "[D]" + RESET + "ifferent Anime")
+    print (GREEN + "[R]" + RESET + "eplay same Episode")
+    print (GREEN + "[C]" + RESET + "hange Mirror")
+    print (GREEN + "[Q]" + RESET + "uit out of program")
 
 
 def player(videoContent):
-    call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
-         stderr=STDOUT)
+    if platform.system() != "Linux":
+        os.putenv('PATH', ';C:\Program Files (x86)\VideoLAN\VLC\;')
+        call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
+            stderr=STDOUT)
+    else:
+        call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL,
+            stderr=STDOUT)
 
-    print ("Video has finished")
-
-
-def menu():
-    print ("[N]ext Episode")
-    print ("[P]revious Episode")
-    print ("[D]ifferent Anime")
-    print ("[R]eplay same Episode")
-    print ("[Q]uit out of program")
-
-if __name__ == "__main__":
-    menuChoice = 'd'
-    while menuChoice != 'q':
-        if menuChoice == 'd':
-            animename = animeName()
-        videoContent = parser(animename, action=menuChoice)
-        player(videoContent)
+if __name__ == '__main__':
+    parser = parser.parser()
+    mainLoop = 'd'
+    content = ""
+    while mainLoop != 'q':
+        valid = True
+        if mainLoop == 'd':
+            animeName = input("Anime Name: ")
+            parser.setAnime(animeName)
+            for selector, episode in parser.getEpisodes():
+                print (GREEN + "[" + str(selector) + "]" + RESET + episode)
+            episodeChoice = input("Choose an episode id " + GREEN +
+                                  "(number in brackets [])" + RESET + ": ")
+            content = parser.playEpisode(int(episodeChoice))
+        elif mainLoop == 'c':
+            for selector, mirror in parser.getMirrors():
+                print (GREEN + "[" + str(selector) + "]" + RESET + mirror)
+            content = parser.playEpisode(int(episodeChoice),
+                                         mirrorChoice=int(input("Mirror: ")))
+        elif mainLoop == 'n':
+            content = parser.playEpisode(parser.nextEpisode)
+            episodeChoice = int(episodeChoice) - 1
+            print (episodeChoice)
+        elif mainLoop == 'p':
+            content = parser.playEpisode(parser.prevEpisode)
+            episodeChoice = int(episodeChoice) + 1
+            print (episodeChoice)
+        elif mainLoop == 'r':
+            pass  # don't need to do anything to replay
+        else:
+            print (RED + "Not a valid option" + RESET)
+            valid = False
+        if valid:
+            print ("Playing: " + parser.getEpisodes()[int(episodeChoice)][1])
+            player(content)
         menu()
-        menuChoice = input(">>")
+        mainLoop = input(GREEN + ">>" + RESET)

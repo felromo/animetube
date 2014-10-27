@@ -31,7 +31,7 @@ for it, it also comes with a very simple command line interface located in **src
 ##### TODO:
 
 * Add more sites to parse
-~~* Add parsers for hosts other than trollvideo
+* ~~Add parsers for hosts other than trollvideo~~
 * Program still needs a lot more structure 
 * Add config file (for preferences) capability
     

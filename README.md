@@ -10,8 +10,8 @@ media player.
 
 ##### TODO:
 
-*Add more sites to parse
-*Add parsers for hosts other than trollvideo
-*Add argument parser capabilities
-*Program still needs a lot more structure 
+* Add more sites to parse
+* Add parsers for hosts other than trollvideo
+* Add argument parser capabilities
+* Program still needs a lot more structure 
     

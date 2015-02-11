@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from plugins import bestanime, hostParser
+from plugins import bestanime, hostParser, watch_anime
 
 
 class parser():
@@ -10,7 +10,7 @@ class parser():
     plugins while still using the same class and methods.
     """
 
-    def __init__(self, animeName="", action='d', siteParser='bestanime',
+    def __init__(self, animeName="", action='d', siteParser=bestanime,
                  hostParser='trollvideo'):
         self.animeName = animeName
         self.episodes = None
@@ -21,41 +21,42 @@ class parser():
         self.mirrors = None
         self.mirrorUrls = None
         self.host = None
+        self.siteParser = siteParser
 
     def __setEpisodes(self):
-        self.episodes = bestanime.get_episodes(
-            bestanime.search_page(self.animeName))
+        self.episodes = self.siteParser.get_episodes(
+            self.siteParser.search_page(self.animeName))
 
     def __setEpisodeUrls(self):
-        self.episodeUrls = bestanime.get_episode_url(
-            bestanime.search_page(self.animeName))
+        self.episodeUrls = self.siteParser.get_episode_url(
+            self.siteParser.search_page(self.animeName))
 
     def __setMirrors(self, episodeChoice):
         if type(episodeChoice) is int:
-            self.mirrors = bestanime.getMirrors(self.episodeUrls[episodeChoice])
+            self.mirrors = self.siteParser.getMirrors(self.episodeUrls[episodeChoice])
         else:
-            self.mirrors = bestanime.getMirrors(episodeChoice)
+            self.mirrors = self.siteParser.getMirrors(episodeChoice)
 
     def __setMirrorUrls(self, episodeChoice):
         if type(episodeChoice) is int:
-            self.mirrorUrls = bestanime.getMirrorUrls(self.episodeUrls[episodeChoice])
+            self.mirrorUrls = self.siteParser.getMirrorUrls(self.episodeUrls[episodeChoice])
         else:
-            self.mirrorUrls = bestanime.getMirrorUrls(episodeChoice)
+            self.mirrorUrls = self.siteParser.getMirrorUrls(episodeChoice)
 
     def __setHost(self, mirrorChoice):
         # this should change according to a future config file
-        self.host = bestanime.getHostingSite(self.mirrorUrls[mirrorChoice])
+        self.host = self.siteParser.getHostingSite(self.mirrorUrls[mirrorChoice])
 
     def __setNextPrev(self, episodeChoice):
         if type(episodeChoice) is int:
-            self.prevEpisode, self.nextEpisode = bestanime.getNextPrev(
+            self.prevEpisode, self.nextEpisode = self.siteParser.getNextPrev(
                 self.episodeUrls[episodeChoice])
         else:
-            self.prevEpisode, self.nextEpisode = bestanime.getNextPrev(
+            self.prevEpisode, self.nextEpisode = self.siteParser.getNextPrev(
                 episodeChoice)
 
     def setAnime(self, animeName):
-        self.animeName = bestanime.searchable_string(animeName)
+        self.animeName = self.siteParser.searchable_string(animeName)
         self.__setEpisodes()
         self.__setEpisodeUrls()
 
@@ -81,6 +82,9 @@ class parser():
         return li
 
     def playEpisode(self, episodeChoice, selection='', mirrorChoice=0):
+        """
+        this method probably does way more than it should...
+        """
         self.__setNextPrev(episodeChoice)
         self.__setMirrors(episodeChoice)
         self.__setMirrorUrls(episodeChoice)

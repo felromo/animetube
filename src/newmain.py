@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from plugins import parser
+from plugins import newparser
 from subprocess import call, Popen, PIPE, STDOUT
 from colorama import Fore, init
 import platform
@@ -42,7 +42,7 @@ def player(videoContent):
         call(['vlc', videoContent, '--play-and-exit'], stdout=DEVNULL, stderr=STDOUT)
 
 if __name__ == '__main__':
-    parser = parser.parser()
+    parser = newparser.parser()
     mainLoop = 'd'
     content = ""
     while mainLoop != 'q':
@@ -50,6 +50,12 @@ if __name__ == '__main__':
         if mainLoop == 'd':
             animeName = input("Anime Name: ")
             parser.setAnime(animeName)
+            try:
+                parser.get_anime_options(animeName)
+            except:
+                print("Did not have method get_anime_options()")
+            else:
+                pass
             for selector, episode in parser.getEpisodes():
                 print (GREEN + "[" + str(selector) + "]" + RESET + episode)
             episodeChoice = input("Choose an episode id " + GREEN +

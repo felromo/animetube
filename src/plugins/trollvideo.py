@@ -13,12 +13,13 @@ def trollvideo(hostUrl):
     the actual content to be passed onto the player
     """
     content = ""
+    search_pattern = r'file:\s(.+)'
     videoRequest = Request(hostUrl, None, USER_AGENT)
     videoHtml = urlopen(videoRequest).read()
     soup = BeautifulSoup(videoHtml)
     scripts = soup.findAll('script', {'type': 'text/javascript'})
-    script = scripts[1]
+    script = scripts[-1]
     for line in script:
-        match = re.search(r'clip:\s*{\s*url:\s*"(.+)"', line)
+        match = re.search(search_pattern, line)
         content = match.group(1)
-    return unquote(content)
+    return unquote(content[1:-2])

@@ -34,4 +34,6 @@ for it, it also comes with a very simple command line interface located in **src
 * ~~Add parsers for hosts other than trollvideo~~
 * Program still needs a lot more structure 
 * Add config file (for preferences) capability
+* Add multi-layered parsing to mainparser
+* Give the mainparser a way to detect multi-layered parsing
     

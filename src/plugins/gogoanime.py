@@ -74,15 +74,53 @@ def get_episodes(html_text):
 
 
 def get_episode_url(html_text):
-    pass
+    li = []
+    content = []
+    soup = BeautifulSoup(html_text)
+    episode_list = soup.findAll('div', {'class': 'postlist'})
+    for i in episode_list:
+        episode_url = i.findAll('a')
+        for f in episode_url:
+            li.append(f['href'])
+    return li
 
 
 def getMirrors(episodeURI):
-    pass
+    li = []
+    la = []
+    mirrors = []
+    pattern = r'(http://)(.+)(\.me|\.net|\.com|\.org)'
+    website_request = Request(episodeURI, None, USER_AGENT)
+    website_html = urlopen(website_request).read()
+    soup = BeautifulSoup(website_html)
+    mirror_list = soup.findAll('div', {'class': 'postcontent'})
+    for i in mirror_list:
+        mirrors = i.findAll('iframe')
+        for f in mirrors:
+            li.append(f['src'])
+    for i in li:
+        match = re.search(pattern, i)
+        if match is not None:
+            sub_str = match.group(2)
+            if sub_str[0:5] == "embed":
+                la.append(sub_str[6:])
+            else:
+                la.append(sub_str)
+    return la
 
 
 def getMirrorUrls(episodeURI):
-    pass
+    website_request = Request(episodeURI, None, USER_AGENT)
+    website_html = urlopen(website_request).read()
+    li = []
+    mirrors = []
+    soup = BeautifulSoup(website_html)
+    mirror_list = soup.findAll('div', {'class': 'postcontent'})
+    for i in mirror_list:
+        mirrors = i.findAll('iframe')
+        for f in mirrors:
+            li.append(f['src'])
+    return li
 
 
 def getHostingSie(mirror):

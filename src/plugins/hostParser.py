@@ -3,7 +3,8 @@ import re
 
 
 def hostParser(url):
-    patternList = ["auengine", "trollvid", "mp4upload", "videofun"]
+    patternList = ["auengine", "easyvideo", "mp4upload", "playbb", "trollvid",
+                   "video44", "videofun", "videowing", "vidzur", "yucache"]
     finalMatch = ""
     content = ""
     for pattern in patternList:

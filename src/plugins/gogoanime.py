@@ -123,9 +123,25 @@ def getMirrorUrls(episodeURI):
     return li
 
 
-def getHostingSie(mirror):
+def getHostingSite(mirror):
     pass
 
 
 def getNextPrev(currentEpisodeUrl):
-    pass
+    prevEP = ""
+    nextEP = ""
+    website_request = Request(currentEpisodeUrl, None, USER_AGENT)
+    website_html = urlopen(website_request).read()
+    soup = BeautifulSoup(website_html)
+    # prev_episode = soup.findAll('div', {'class': 'alignleft'})
+    results = soup.findAll('div', {'class': 'alignleft'})
+    for i in results:
+        tmp = i.findAll('a')
+        for f in tmp:
+            prevEP = f['href']
+    results = soup.findAll('div', {'class': 'alignright'})
+    for i in results:
+        tmp = i.findAll('a')
+        for f in tmp:
+            nextEP = f['href']
+    return (prevEP, nextEP)

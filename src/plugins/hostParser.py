@@ -1,45 +1,32 @@
 #!/usr/bin/python3
+
 import re
+from os import walk
+from os.path import splitext
 
 
 def hostParser(url):
-    patternList = ["auengine", "easyvideo", "mp4upload", "playbb", "trollvid",
-                   "video44", "videofun", "videowing", "vidzur", "yucache"]
-    finalMatch = ""
-    content = ""
-    for pattern in patternList:
-        match = re.findall(pattern, url)
-        if match:
-            finalMatch = match[0]
-    if finalMatch == "auengine":
-        from plugins import auengine
-        content = auengine.auengine(url)
-    if finalMatch == "easyvideo":
-        from plugins import easyvideo
-        content = easyvideo.easyvideo(url)
-    if finalMatch == "mp4upload":
-        from plugins import mp4upload
-        content = mp4upload.mp4upload(url)
-    if finalMatch == "playbb":
-        from plugins import playbb
-        content = playbb.playbb(url)
-    if finalMatch == "trollvid":
-        from plugins import trollvideo
-        content = trollvideo.trollvideo(url)
-    if finalMatch == "video44":
-        from plugins import video44
-        content = video44.video44(url)
-    if finalMatch == "videofun":
-        from plugins import videofun
-        content = videofun.videofun(url)
-    if finalMatch == "videowing":
-        from plugins import videowing
-        content = videowing.videowing(url)
-    if finalMatch == "vidzur":
-        from plugins import vidzur
-        content = vidzur.vidzur(url)
-    if finalMatch == "yucache":
-        from plugins import yucache
-        content = yucache.yucache(url)
 
-    return content
+    plugin_list = []
+    parser_plugin = None
+    final_parser = None
+    tmp = None
+    # this part creates the list of plugins from the HostParsers directory
+    for _, _, plugins in walk('./HostParsers'):
+        for plugin in plugins:
+            plugin_list.append(splitext(plugin)[0])
+            # break # skip over pyc files with the same name
+
+    # this runs through all the modules in the dir and imports the url match
+    for plugin in plugin_list:
+        if url in plugin and not 'cpython' in plugin:
+            tmp = plugin
+            parser_plugin = __import__('HostParsers.' + plugin, globals(),
+                                       locals(), [plugin])
+    # this needs to call a function from inside the imported module ;-;
+    for key, val in vars(parser_plugin).items():
+        if tmp == key: # this is not working (plugin is empty)
+            return val(url)
+
+if __name__ == '__main__':
+    hostParser2('auengine')

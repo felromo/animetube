@@ -2,15 +2,20 @@
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
+from urllib.parse import quote_plus
 
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
 
 
 def searchable_string(user_input):
-    return user_input.replace(' ', '+')
+    """method takes in a string, then replaces all the spaces with + and
+    returns a new string"""
+    return quote_plus(user_input)
 
 
 def search_page(anime_name):
+    """makes a request to the search function on the site and returns
+    that html"""
     website_request = Request("http://bestanimes.tv/?s=" +
                               searchable_string(anime_name), None, USER_AGENT)
     website_html = urlopen(website_request).read()
@@ -18,6 +23,7 @@ def search_page(anime_name):
 
 
 def get_episodes(html_text):
+    """parses the passed parameter and looks for the episodes title (the text)"""
     li = []
     soup = BeautifulSoup(html_text)
     episode_list = soup.findAll('div', {'class': 'episode-list'})
@@ -28,6 +34,7 @@ def get_episodes(html_text):
 
 
 def get_episode_url(html_text):
+    """parses the passed parameter and looks for the episodes title (the link)"""
     li = []
     soup = BeautifulSoup(html_text)
     episode_url_list = soup.findAll('div', {'class': 'episode-list'})

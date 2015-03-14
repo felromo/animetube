@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 from plugins import hostParser
 from plugins.SiteParsers import bestanime
-import ipdb
 
 
 class parser():

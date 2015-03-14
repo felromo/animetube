@@ -2,7 +2,7 @@
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
-import urllib.parse
+from urllib.parse import quote_plus
 import re
 
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
@@ -13,7 +13,7 @@ def is_multilayered():
 
 
 def searchable_string(user_input):
-    return user_input.replace(' ', '+')
+    return quote_plus(user_input)
 
 
 def search_page(anime_name):
@@ -26,7 +26,6 @@ def search_page(anime_name):
 def get_anime_titles(html_text):
     li = []
     li2 = []
-    content = []
     pattern = r'category'
     soup = BeautifulSoup(html_text)
     episode_list = soup.findAll('div', {'class': 'postlist'})
@@ -56,7 +55,7 @@ def get_anime_urls(html_text):
             content.append(match.string)
     return content
 
-
+# after this method runs things can resume like on other plugins..
 def get_anime_page(uri):
     website_request = Request(uri, None, USER_AGENT)
     website_html = urlopen(website_request).read()
@@ -65,7 +64,6 @@ def get_anime_page(uri):
 
 def get_episodes(html_text):
     li = []
-    content = []
     soup = BeautifulSoup(html_text)
     episode_list = soup.findAll('div', {'class': 'postlist'})
     for i in episode_list:
@@ -75,7 +73,6 @@ def get_episodes(html_text):
 
 def get_episode_url(html_text):
     li = []
-    content = []
     soup = BeautifulSoup(html_text)
     episode_list = soup.findAll('div', {'class': 'postlist'})
     for i in episode_list:
@@ -124,7 +121,19 @@ def getMirrorUrls(episodeURI):
 
 
 def getHostingSite(mirror):
-    pass
+    """due to how this website is handled I think the method should run just like
+    getMirrorUrls, since they need to return the same link"""
+    website_request = Request(mirror, None, USER_AGENT)
+    website_html = urlopen(website_request).read()
+    li = []
+    mirrors = []
+    soup = BeautifulSoup(website_html)
+    mirror_list = soup.findAll('div', {'class': 'postcontent'})
+    for i in mirror_list:
+        mirrors = i.findAll('iframe')
+        for f in mirrors:
+            li.append(f['src'])
+    return li
 
 
 def getNextPrev(currentEpisodeUrl):

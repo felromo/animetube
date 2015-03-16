@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from plugins import newparser
+from plugins import parser as newparser
 from subprocess import call, Popen, PIPE, STDOUT
 from colorama import Fore, init
 import platform

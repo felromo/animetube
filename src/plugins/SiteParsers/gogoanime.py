@@ -55,6 +55,7 @@ def get_anime_urls(html_text):
             content.append(match.string)
     return content
 
+
 # after this method runs things can resume like on other plugins..
 def get_anime_page(uri):
     website_request = Request(uri, None, USER_AGENT)

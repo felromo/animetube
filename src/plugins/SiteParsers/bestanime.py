@@ -7,6 +7,10 @@ from urllib.parse import quote_plus
 USER_AGENT = {'User-agent': 'Mozilla/5.0'}
 
 
+def is_multilayered():
+    return False
+
+
 def searchable_string(user_input):
     """method takes in a string, then replaces all the spaces with + and
     returns a new string"""
